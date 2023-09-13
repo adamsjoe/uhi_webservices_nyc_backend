@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -22,20 +22,20 @@ connection.once("open", () => {
 
 const accidentDataModel = require("./models/accidentDataModel");
 
-app.get("/historic/boroughs", async (req, res) => {
+app.get("/historic/all", async (req, res) => {
   try {
-    const allBoroughs = await accidentDataModel.find().distinct("BOROUGH");
-
-    res.json(allBoroughs);
+    const allAccidentData = await accidentDataModel.find();
+    res.json(allAccidentData);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-app.get("/historic/all", async (req, res) => {
+app.get("/historic/boroughs", async (req, res) => {
   try {
-    const allAccidentData = await accidentDataModel.find();
-    res.json(allAccidentData);
+    const allBoroughs = await accidentDataModel.find().distinct("BOROUGH");
+
+    res.json(allBoroughs);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
