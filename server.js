@@ -22,7 +22,17 @@ connection.once("open", () => {
 
 const accidentDataModel = require("./models/accidentDataModel");
 
-app.get("/getAllData/", async (req, res) => {
+app.get("/historic/boroughs", async (req, res) => {
+  try {
+    const allBoroughs = await accidentDataModel.find().distinct("BOROUGH");
+
+    res.json(allBoroughs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get("/historic/all", async (req, res) => {
   try {
     const allAccidentData = await accidentDataModel.find();
     res.json(allAccidentData);
@@ -31,7 +41,7 @@ app.get("/getAllData/", async (req, res) => {
   }
 });
 
-app.get("/borough/:name", async (req, res) => {
+app.get("/historic/borough/:name", async (req, res) => {
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
@@ -42,7 +52,7 @@ app.get("/borough/:name", async (req, res) => {
   }
 });
 
-app.get("/borough/:name/:year", async (req, res) => {
+app.get("/historic/borough/:name/:year", async (req, res) => {
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
@@ -54,7 +64,7 @@ app.get("/borough/:name/:year", async (req, res) => {
   }
 });
 
-app.get("/borough/:name/:year/:month", async (req, res) => {
+app.get("/historic/borough/:name/:year/:month", async (req, res) => {
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
@@ -67,7 +77,7 @@ app.get("/borough/:name/:year/:month", async (req, res) => {
   }
 });
 
-app.get("/borough/:name/:year/:month/:day", async (req, res) => {
+app.get("/historic/borough/:name/:year/:month/:day", async (req, res) => {
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
