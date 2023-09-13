@@ -31,28 +31,55 @@ app.get("/getAllData/", async (req, res) => {
   }
 });
 
-// app.get("/movie/:title", (req, res) => {
-//   // const movie = movies.find(
-//   //   (singleMovie) => singleMovie.title == req.params.title
-//   // );
-//   // res.json(movie);
-// });
+app.get("/borough/:name", async (req, res) => {
+  try {
+    const boroughData = await accidentDataModel.find({
+      BOROUGH: req.params.name,
+    });
+    res.json(boroughData);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-// app.get("/movies/", (req, res) => {
-//   // res.json(movies);
-// });
+app.get("/borough/:name/:year", async (req, res) => {
+  try {
+    const boroughData = await accidentDataModel.find({
+      BOROUGH: req.params.name,
+      YEAR: req.params.year,
+    });
+    res.json(boroughData);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-// app.get("/movies/dir/:name", (req, res) => {
-//   // const dirMovies = movies.filter(
-//   //   (dirMovie) => dirMovie.dir == req.params.name
-//   // );
-//   // res.json(dirMovies);
-// });
+app.get("/borough/:name/:year/:month", async (req, res) => {
+  try {
+    const boroughData = await accidentDataModel.find({
+      BOROUGH: req.params.name,
+      YEAR: req.params.year,
+      MONTH: req.params.month,
+    });
+    res.json(boroughData);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-// app.post("/movie", (req, res) => {
-//   // movies.push(req.body);
-//   // res.json("movie added");
-// });
+app.get("/borough/:name/:year/:month/:day", async (req, res) => {
+  try {
+    const boroughData = await accidentDataModel.find({
+      BOROUGH: req.params.name,
+      YEAR: req.params.year,
+      MONTH: req.params.month,
+      DAY: req.params.day,
+    });
+    res.json(boroughData);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 app.listen(port, () => {
   console.log("Wating for connection...");
