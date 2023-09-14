@@ -2,11 +2,31 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const swaggerDefinition = {
+  openapi: "3.0.0",
+  info: {
+    title: "New York Accident visualiser API",
+    version: "1.0.0",
+  },
+};
+
+const options = {
+  swaggerDefinition,
+  apis: ["./*.js"],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
 const app = express();
 const port = 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(
   cors({
@@ -29,6 +49,15 @@ connection.once("open", () => {
 
 const accidentDataModel = require("./models/accidentDataModel");
 
+/**
+ * @swagger
+ * /historic/all:
+ *   get:
+ *     summary: Retrieves all the data in the database.
+ *     description: Retrieves all the data, for all boroughs and years.  Not useful for real application, used mainly to test calls are working.
+ *     tags:
+ *       - Historic
+ */
 app.get("/historic/all", async (req, res) => {
   try {
     const allAccidentData = await accidentDataModel.find();
@@ -38,6 +67,32 @@ app.get("/historic/all", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /historic/boroughs:
+ *   get:
+ *     summary: Retrieves an array of boroughs in the database.
+ *     description: Returns an array of all unique Boroughs in the database.
+ *     tags:
+ *       - Historic
+ *     responses:
+ *       200:
+ *         description: A list of boroughs.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: A borough.
+ *                         example: BRONX
+ */
 app.get("/historic/boroughs", async (req, res) => {
   try {
     const allBoroughs = await accidentDataModel.find().distinct("BOROUGH");
@@ -48,6 +103,15 @@ app.get("/historic/boroughs", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /historic/borough/{name}:
+ *   get:
+ *     summary: Retrieves all data for a given borough
+ *     description: Returns an array of of objects of all the data (over all years) for a given borough.
+ *     tags:
+ *       - Historic
+ */
 app.get("/historic/borough/:name", async (req, res) => {
   try {
     const boroughData = await accidentDataModel.find({
@@ -59,6 +123,15 @@ app.get("/historic/borough/:name", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /historic/borough/:name/summary:
+ *   get:
+ *     summary: Retrieves a summary of the data for a given borough
+ *     description: Returns a summary of the data for the borough.
+ *     tags:
+ *       - Historic
+ */
 app.get("/historic/borough/:name/summary", async (req, res) => {
   console.log("in summary for " + req.params.name);
   class BoroughSummary {
@@ -136,6 +209,15 @@ app.get("/historic/borough/:name/summary", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /historic/borough/:name/:year:
+ *   get:
+ *     summary: Retrieves the data for a given borough and year
+ *     description: Returns the data for the borough and year.
+ *     tags:
+ *       - Historic
+ */
 app.get("/historic/borough/:name/:year", async (req, res) => {
   try {
     const boroughData = await accidentDataModel.find({
@@ -148,6 +230,15 @@ app.get("/historic/borough/:name/:year", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /historic/borough/:name/:year/summary:
+ *   get:
+ *     summary: Retrieves a summary of the data for the given borough and year.
+ *     description: Returns a summary of the data for the given borough and year.
+ *     tags:
+ *       - Historic
+ */
 app.get("/historic/borough/:name/:year/summary", async (req, res) => {
   class BoroughSummary {
     constructor(
@@ -209,6 +300,15 @@ app.get("/historic/borough/:name/:year/summary", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /historic/borough/:name/:year/:month:
+ *   get:
+ *     summary: Retrieves the data for the given borough, year and month.
+ *     description: Retrieves the data for the given borough, year and month.
+ *     tags:
+ *       - Historic
+ */
 app.get("/historic/borough/:name/:year/:month", async (req, res) => {
   try {
     const boroughData = await accidentDataModel.find({
@@ -222,6 +322,15 @@ app.get("/historic/borough/:name/:year/:month", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /historic/borough/:name/:year/:month/:day:
+ *   get:
+ *     summary: Retrieves the data for the given borough, year, month and day.
+ *     description: Retrieves the data for the given borough, year, month and day.
+ *     tags:
+ *       - Historic
+ */
 app.get("/historic/borough/:name/:year/:month/:day", async (req, res) => {
   try {
     const boroughData = await accidentDataModel.find({
