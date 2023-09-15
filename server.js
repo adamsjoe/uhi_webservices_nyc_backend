@@ -60,6 +60,7 @@ const accidentDataModel = require("./models/accidentDataModel");
  */
 app.get("/historic/all", async (req, res) => {
   try {
+    console.log("In the all data query");
     const allAccidentData = await accidentDataModel.find();
     res.json(allAccidentData);
   } catch (err) {
@@ -95,6 +96,7 @@ app.get("/historic/all", async (req, res) => {
  */
 app.get("/historic/boroughs", async (req, res) => {
   try {
+    console.log(`In the historic query to get all boroughs`);
     const allBoroughs = await accidentDataModel.find().distinct("BOROUGH");
 
     res.json(allBoroughs);
@@ -113,6 +115,7 @@ app.get("/historic/boroughs", async (req, res) => {
  *       - Historic
  */
 app.get("/historic/borough/:name", async (req, res) => {
+  console.log(`In the historic query to get all data for ${req.params.name}`);
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
@@ -203,6 +206,8 @@ app.get("/historic/borough/:name/summary", async (req, res) => {
 
     const summaryArray = Object.values(summaries);
 
+    summaryArray.sort((a, b) => a.month - b.month);
+
     res.json(summaryArray);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -219,7 +224,7 @@ app.get("/historic/borough/:name/summary", async (req, res) => {
  */
 // had to defind this before due to how express matches routes, once it its a match it stops!!
 app.get("/historic/borough/:name/activeYears", async (req, res) => {
-  console.log("in active years");
+  console.log(`in active years for ${req.params.name}`);
   try {
     const boroughData = await accidentDataModel
       .find({
@@ -242,7 +247,7 @@ app.get("/historic/borough/:name/activeYears", async (req, res) => {
  *       - Historic
  */
 app.get("/historic/borough/:name/:year", async (req, res) => {
-  console.log("in borough year query");
+  console.log(`in query for ${req.params.name} for ${req.params.year}`);
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
@@ -264,8 +269,13 @@ app.get("/historic/borough/:name/:year", async (req, res) => {
  *       - Historic
  */
 app.get("/historic/borough/:name/:year/summary", async (req, res) => {
+  console.log(
+    `in query for ${req.params.name} for ${req.params.year} - SUMMAARY`
+  );
+
   class BoroughSummary {
     constructor(
+      year,
       month,
       CYC_KILL,
       CYC_INJD,
@@ -277,6 +287,7 @@ app.get("/historic/borough/:name/:year/summary", async (req, res) => {
       PERS_INJD,
       NUM_COLS
     ) {
+      this.year = year;
       this.month = month;
       this.CYC_KILL = CYC_KILL;
       this.CYC_INJD = CYC_INJD;
@@ -299,24 +310,45 @@ app.get("/historic/borough/:name/:year/summary", async (req, res) => {
     });
 
     boroughData.forEach((item) => {
+      const year = item.YEAR;
       const month = item.MONTH;
-      if (!summaries[month]) {
-        summaries[month] = new BoroughSummary(month, 0, 0, 0, 0, 0, 0, 0, 0, 0); // Initialize with zeros
+      const key = `${year}=${month}`;
+
+      console.log(`year ${year}`);
+      console.log(`month ${month}`);
+      console.log(`key ${key}`);
+
+      if (!summaries[key]) {
+        summaries[key] = new BoroughSummary(
+          year,
+          month,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ); // Initialize with zeros
       }
 
       // Aggregate the values
-      summaries[month].CYC_KILL += item.CYC_KILL;
-      summaries[month].CYC_INJD += item.CYC_INJD;
-      summaries[month].MOTO_KILL += item.MOTO_KILL;
-      summaries[month].MOTO_INJD += item.MOTO_INJD;
-      summaries[month].PEDS_KILL += item.PEDS_KILL;
-      summaries[month].PEDS_INJD += item.PEDS_INJD;
-      summaries[month].PERS_KILL += item.PERS_KILL;
-      summaries[month].PERS_INJD += item.PERS_INJD;
-      summaries[month].NUM_COLS += item.NUM_COLS;
+      summaries[key].CYC_KILL += item.CYC_KILL;
+      summaries[key].CYC_INJD += item.CYC_INJD;
+      summaries[key].MOTO_KILL += item.MOTO_KILL;
+      summaries[key].MOTO_INJD += item.MOTO_INJD;
+      summaries[key].PEDS_KILL += item.PEDS_KILL;
+      summaries[key].PEDS_INJD += item.PEDS_INJD;
+      summaries[key].PERS_KILL += item.PERS_KILL;
+      summaries[key].PERS_INJD += item.PERS_INJD;
+      summaries[key].NUM_COLS += item.NUM_COLS;
     });
 
     const summaryArray = Object.values(summaries);
+
+    summaryArray.sort((a, b) => a.month - b.month);
 
     res.json(summaryArray);
   } catch (err) {
@@ -334,6 +366,9 @@ app.get("/historic/borough/:name/:year/summary", async (req, res) => {
  *       - Historic
  */
 app.get("/historic/borough/:name/:year/:month", async (req, res) => {
+  console.log(
+    `in query for ${req.params.name} for ${req.params.year} and ${req.params.month}`
+  );
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
@@ -356,6 +391,9 @@ app.get("/historic/borough/:name/:year/:month", async (req, res) => {
  *       - Historic
  */
 app.get("/historic/borough/:name/:year/:month/:day", async (req, res) => {
+  console.log(
+    `in query for ${req.params.name} for ${req.params.year} and ${req.params.month} and ${req.params.day}`
+  );
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
