@@ -211,6 +211,29 @@ app.get("/historic/borough/:name/summary", async (req, res) => {
 
 /**
  * @swagger
+ * /historic/borough/:name/getActiveYears:
+ *   get:
+ *     summary: Retrieves a list of distinct years for the given borough
+ *     tags:
+ *       - Historic
+ */
+// had to defind this before due to how express matches routes, once it its a match it stops!!
+app.get("/historic/borough/:name/activeYears", async (req, res) => {
+  console.log("in active years");
+  try {
+    const boroughData = await accidentDataModel
+      .find({
+        BOROUGH: req.params.name,
+      })
+      .distinct("YEAR");
+    res.json(boroughData);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/**
+ * @swagger
  * /historic/borough/:name/:year:
  *   get:
  *     summary: Retrieves the data for a given borough and year
@@ -219,6 +242,7 @@ app.get("/historic/borough/:name/summary", async (req, res) => {
  *       - Historic
  */
 app.get("/historic/borough/:name/:year", async (req, res) => {
+  console.log("in borough year query");
   try {
     const boroughData = await accidentDataModel.find({
       BOROUGH: req.params.name,
