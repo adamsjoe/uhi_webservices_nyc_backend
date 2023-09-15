@@ -206,7 +206,15 @@ app.get("/historic/borough/:name/summary", async (req, res) => {
 
     const summaryArray = Object.values(summaries);
 
-    summaryArray.sort((a, b) => a.month - b.month);
+    summaryArray.sort((a, b) => {
+      // Compare years first
+      if (a.year !== b.year) {
+        return a.year - b.year;
+      }
+
+      // If years are the same, compare months
+      return a.month - b.month;
+    });
 
     res.json(summaryArray);
   } catch (err) {
