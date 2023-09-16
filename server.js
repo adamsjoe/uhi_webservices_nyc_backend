@@ -70,6 +70,54 @@ app.get("/historic/all", async (req, res) => {
 
 /**
  * @swagger
+ * /historic/getMinDate:
+ *   get:
+ *     summary: Retrieves the earliest record in the database.
+ *     description: Retrieves the earliest record in the database.
+ *     tags:
+ *       - Historic
+ */
+app.get("/historic/getMinDate", async (req, res) => {
+  try {
+    console.log("In the find earliest record query");
+    const allAccidentData = await accidentDataModel
+      .findOne()
+      .sort({ DATE: 1 })
+      .lean()
+      .exec();
+    const datePart = allAccidentData.DATE.toISOString().split("T")[0];
+    res.json(datePart);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /historic/getMaxDate:
+ *   get:
+ *     summary: Retrieves the latest record in the database.
+ *     description: Retrieves the earliest record in the database.
+ *     tags:
+ *       - Historic
+ */
+app.get("/historic/getMaxDate", async (req, res) => {
+  try {
+    console.log("In the find latest record query");
+    const allAccidentData = await accidentDataModel
+      .findOne()
+      .sort({ DATE: -1 })
+      .lean()
+      .exec();
+    const datePart = allAccidentData.DATE.toISOString().split("T")[0];
+    res.json(datePart);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/**
+ * @swagger
  * /historic/boroughs:
  *   get:
  *     summary: Retrieves an array of boroughs in the database.
