@@ -426,11 +426,14 @@ app.get("/historic/borough/:name/:year/:month", async (req, res) => {
     `in query for ${req.params.name} for ${req.params.year} and ${req.params.month}`
   );
   try {
-    const boroughData = await accidentDataModel.find({
-      BOROUGH: req.params.name,
-      YEAR: req.params.year,
-      MONTH: req.params.month,
-    });
+    const boroughData = await accidentDataModel
+      .find({
+        BOROUGH: req.params.name,
+        YEAR: req.params.year,
+        MONTH: req.params.month,
+      })
+      .sort({ DAY: 1 });
+
     res.json(boroughData);
   } catch (err) {
     res.status(500).json({ message: err.message });
