@@ -9,6 +9,8 @@ const { createWeatherView } = require("./createWeatherView");
 const {
   createInitialCollisionsView,
 } = require("./createInitialCollisionsView");
+const { handleMissingBorough } = require("./handleMissingBoroughs");
+
 const { createViewWithDayField } = require("./createWithDay");
 const { consolodateViews } = require("./consolodateView");
 
@@ -497,8 +499,11 @@ app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
     MONTH
   );
 
-  // now we need to add in a day (well we don't but if we accomplish
-  // stretch goals it will be needed, so may as well do it here)
+  // now handle the missing boroughs, need to ensure our data is as spot on as possible
+  await handleMissingBorough(nameForTempInitialCollisionsView);
+
+  // // now we need to add in a day (well we don't but if we accomplish
+  // // stretch goals it will be needed, so may as well do it here)
   const nameForViewWithDay = `x3-${BOROUGH}-${MONTH}-${YEAR}-final`;
   await createViewWithDayField(
     nameForViewWithDay,
@@ -506,9 +511,12 @@ app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
   );
 
   const results = await consolodateViews(nameForViewWithDay, tempWeatherView);
-  res.json(results);
+  // res.json(results);
 });
 
 app.listen(port, () => {
   console.log("Wating for connection...");
 });
+
+// note for me.
+// something isn't quite working right, take a break and come back
