@@ -8,7 +8,7 @@ async function createWeatherView(year, newVieName) {
   try {
     console.log("Creating temporary weather view");
     console.log(
-      `-->Weatjer view name will be uhi-assignment-1.assignment.weatherView-${newVieName}`
+      `-->Weather view name will be uhi-assignment-1.assignment.weatherView-${newVieName}`
     );
     const viewName = `uhi-assignment-1.assignment.${newVieName}`;
     const query = `
