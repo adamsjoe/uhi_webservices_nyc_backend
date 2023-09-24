@@ -5,6 +5,17 @@ const mongoose = require("mongoose");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
+const { createWeatherView } = require("./createWeatherView");
+const {
+  createInitialCollisionsView,
+} = require("./createInitialCollisionsView");
+const { createViewWithDayField } = require("./createWithDay");
+const { consolodateViews } = require("./consolodateView");
+
+// setup the service account to access google
+const service_key = "./service-key.json";
+process.env.GOOGLE_APPLICATION_CREDENTIALS = service_key;
+
 const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
@@ -464,6 +475,38 @@ app.get("/historic/borough/:name/:year/:month/:day", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+
+app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
+  console.log("in live query");
+
+  const BOROUGH = req.params.name;
+  const YEAR = req.params.year;
+  const MONTH = req.params.month;
+
+  // Call with the temp table name - we will delete this later
+  const tempWeatherView = `x1-tempWeatherFor-${YEAR}`;
+  await createWeatherView(YEAR, tempWeatherView);
+
+  // create a temp view for initial collisions
+  const nameForTempInitialCollisionsView = `x2-initial_colison_data_${BOROUGH}-${MONTH}-${YEAR}`;
+  await createInitialCollisionsView(
+    nameForTempInitialCollisionsView,
+    BOROUGH,
+    YEAR,
+    MONTH
+  );
+
+  // now we need to add in a day (well we don't but if we accomplish
+  // stretch goals it will be needed, so may as well do it here)
+  const nameForViewWithDay = `x3-${BOROUGH}-${MONTH}-${YEAR}-final`;
+  await createViewWithDayField(
+    nameForViewWithDay,
+    nameForTempInitialCollisionsView
+  );
+
+  const results = await consolodateViews(nameForViewWithDay, tempWeatherView);
+  res.json(results);
 });
 
 app.listen(port, () => {
