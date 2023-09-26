@@ -13,6 +13,7 @@ const { handleMissingBorough } = require("./handleMissingBoroughs");
 
 const { createViewWithDayField } = require("./createWithDay");
 const { consolodateViews } = require("./consolodateView");
+const { returnAggregatedView } = require("./returnAggregatedView");
 
 // setup the service account to access google
 const service_key = "./service-key.json";
@@ -485,6 +486,7 @@ app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
   const BOROUGH = req.params.name;
   const YEAR = req.params.year;
   const MONTH = req.params.month;
+  const qualifierName = "uhi-assignment-1.assignment.";
 
   // Call with the temp table name - we will delete this later
   const tempWeatherView = `x1-tempWeatherFor-${YEAR}`;
@@ -500,7 +502,7 @@ app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
   );
 
   // now handle the missing boroughs, need to ensure our data is as spot on as possible
-  await handleMissingBorough(nameForTempInitialCollisionsView);
+  // await handleMissingBorough(nameForTempInitialCollisionsView);
 
   // // now we need to add in a day (well we don't but if we accomplish
   // // stretch goals it will be needed, so may as well do it here)
@@ -510,8 +512,16 @@ app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
     nameForTempInitialCollisionsView
   );
 
-  const results = await consolodateViews(nameForViewWithDay, tempWeatherView);
-  // res.json(results);
+  const consolodatedViewName = `x4-${BOROUGH}-${MONTH}-${YEAR}-consolodated`;
+
+  await consolodateViews(
+    consolodatedViewName,
+    qualifierName + nameForViewWithDay,
+    qualifierName + tempWeatherView
+  );
+
+  const results = await returnAggregatedView(consolodatedViewName);
+  res.json(results);
 });
 
 app.listen(port, () => {
