@@ -2,45 +2,41 @@ const { BigQuery } = require("@google-cloud/bigquery");
 
 const bigquery = new BigQuery();
 
-async function consolodateViews(tableName, weatherView) {
+async function consolodateViews(collated_name, tableName, weatherView) {
   console.log("Creating final conslodated table");
 
   const query = `
-  CREATE TABLE \`uhi-assignment-1.assignment.x4-collated_data\` AS
-  SELECT
-    DATE,
-    BOROUGH,
-    WEEKDAY,
-    YEAR,
-    MONTH,
-    DAY,
-    COLLISION_DATE,
-    TEMP,
-    DEWP,
-    SLP,
-    VISIB,
-    WDSP,
-    MXPSD,
-    GUST,
-    MAX,
-    MIN,
-    PRCP,
-    SNDP,
-    FOG,
-    CYCLISTS_KILLED,
-    CYCLISTS_INJURED,
+  CREATE OR REPLACE TABLE \`uhi-assignment-1.assignment.${collated_name}\` 
+  AS SELECT day, 
+    year, 
+    mo, 
+    da, 
+    collision_date,  
+    NEIGHBORHOOD, 
+    LAT, 
+    LONG,
+    temp, 
+    dewp, 
+    slp, 
+    visib, 
+    wdsp, 
+    mxpsd, 
+    gust, 
+    max,
+    min, 
+    prcp, 
+    sndp,
+    fog, 
+    CYCLISTS_KILLED, 
+    CYCLISTS_INJURED, 
     MOTORISTS_KILLED,
-    MOTORISTS_INJURED,
-    PEDS_KILLED,
+    MOTORISTS_INJURED, 
+    PEDS_KILLED, 
     PEDS_INJURED,
-    PERSONS_KILLED,
-    PERSONS_INJURED,
-    NUM_COLLISIONS
-  FROM
-    \`uhi-assignment-1.assignment.${weatherView}\` AS weather,
-    \`uhi-assignment-1.assignment.${tableName}\` AS complaints
-  WHERE
-    complaints.collision_date = weather.date
+    PERSONS_KILLED, 
+    PERSONS_INJURED, 
+    NUM_COLLISIONS 
+  FROM \`${weatherView}\` as weather, \`${tableName}\`  as complaints WHERE complaints.collision_date = weather.date
 `;
 
   // For all options, see https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/query
@@ -57,7 +53,5 @@ async function consolodateViews(tableName, weatherView) {
   // Wait for the query to finish
   const [rows] = await job.getQueryResults();
   console.log(`-->Collated table created successfully.`);
-
-  return [rows];
 }
 module.exports = { consolodateViews };
