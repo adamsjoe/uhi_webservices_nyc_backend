@@ -11,7 +11,32 @@ async function createWeatherView(year, newVieName) {
       `-->Weather view name will be uhi-assignment-1.assignment.weatherView-${newVieName}`
     );
     const viewName = `uhi-assignment-1.assignment.${newVieName}`;
+
     const query = `
+      CREATE OR REPLACE VIEW \`${viewName}\` AS
+      SELECT
+      DATE(CAST(year AS INT64), CAST(mo AS INT64), CAST(da AS INT64)) AS date,
+      year,
+      mo,
+      da,
+      CAST(temp AS FLOAT64) AS temp,
+      CAST(dewp AS FLOAT64) AS dewp,
+      CAST(slp AS FLOAT64) AS slp,
+      CAST(visib AS FLOAT64) AS visib,
+      CAST(wdsp AS FLOAT64) AS wdsp,
+      CAST(mxpsd AS FLOAT64) AS mxpsd,
+      CAST(gust AS FLOAT64) AS gust,
+      CAST(max AS FLOAT64) AS max,
+      CAST(min AS FLOAT64) AS min,
+      CAST(prcp AS FLOAT64) AS prcp,
+      CAST(sndp AS FLOAT64) AS sndp,
+      CAST(fog AS FLOAT64) AS fog
+    FROM
+        \`bigquery-public-data.noaa_gsod.gsod${year}\`
+    WHERE
+      stn = '725060'`;
+
+    const query2 = `
       CREATE OR REPLACE VIEW \`${viewName}\` AS
       SELECT
         DATE(CAST(year AS INT64), CAST(mo AS INT64), CAST(da AS INT64)) AS date,
