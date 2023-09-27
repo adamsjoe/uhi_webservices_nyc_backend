@@ -437,7 +437,7 @@ app.get("/historic/borough/:name/:year/summary", async (req, res) => {
  */
 app.get("/historic/borough/:name/:year/:month", async (req, res) => {
   console.log(
-    `in query for ${req.params.name} for ${req.params.year} and ${req.params.month}`
+    `in historic query for ${req.params.name} for ${req.params.year} and ${req.params.month}`
   );
   try {
     const boroughData = await accidentDataModel
@@ -481,7 +481,9 @@ app.get("/historic/borough/:name/:year/:month/:day", async (req, res) => {
 });
 
 app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
-  console.log("in live query");
+  console.log(
+    `in live query for ${req.params.name} ${req.params.year} ${req.params.month}`
+  );
 
   const BOROUGH = req.params.name;
   const YEAR = req.params.year;
@@ -521,7 +523,9 @@ app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
   );
 
   const results = await returnAggregatedView(consolodatedViewName);
-  res.json(results);
+
+  // cleanup
+  res.json(results[0]);
 });
 
 app.listen(port, () => {
