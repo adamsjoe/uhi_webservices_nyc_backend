@@ -525,12 +525,16 @@ app.get("/liveData/borough/:name/:year/:month", async (req, res) => {
   const results = await returnAggregatedView(consolodatedViewName);
 
   // cleanup
+  console.log(`DROP VIEW \`${qualifierName}${tempWeatherView}\``);
+  console.log(
+    `DROP VIEW \`${qualifierName}${nameForTempInitialCollisionsView}\``
+  );
+  console.log(`DROP VIEW \`${qualifierName}${nameForViewWithDay}\``);
+  console.log(`DROP TABLE \`${qualifierName}${consolodatedViewName}\``);
+
   res.json(results[0]);
 });
 
 app.listen(port, () => {
   console.log("Wating for connection...");
 });
-
-// note for me.
-// something isn't quite working right, take a break and come back
