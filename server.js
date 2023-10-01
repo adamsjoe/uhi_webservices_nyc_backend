@@ -158,7 +158,7 @@ app.get("/historic/getMaxDate", async (req, res) => {
  */
 app.get("/historic/boroughs", async (req, res) => {
   try {
-    console.log(`In the historic query to get all boroughs`);
+    console.log(`-> In the historic query to get all boroughs`);
     const allBoroughs = await accidentDataModel.find().distinct("BOROUGH");
 
     res.json(allBoroughs);
