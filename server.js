@@ -9,28 +9,28 @@ const mongoose = require("mongoose");
 // const service_key = "./service-key.json";
 // process.env.GOOGLE_APPLICATION_CREDENTIALS = service_key;
 
-const swaggerDefinition = {
-  openapi: "3.0.0",
-  info: {
-    title: "New York Accident visualiser API",
-    version: "1.0.0",
-  },
-};
+// const swaggerDefinition = {
+//   openapi: "3.0.0",
+//   info: {
+//     title: "New York Accident visualiser API",
+//     version: "1.0.0",
+//   },
+// };
 
-const options = {
-  swaggerDefinition,
-  apis: ["./*.js"],
-};
+// const options = {
+//   swaggerDefinition,
+//   apis: ["./*.js"],
+// };
 
-const swaggerSpec = swaggerJSDoc(options);
+// const swaggerSpec = swaggerJSDoc(options);
 
 const app = express();
-const port = 8080;
+const port = 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // app.use(
 //   cors({
@@ -58,4 +58,9 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(port, () => {
   console.log("Waiting for connection...");
+});
+
+app.get("/hello", async (req, res) => {
+  console.log("Saying hello.");
+  res.status(200).json({ message: "Hello There." });
 });
