@@ -25,18 +25,18 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 const app = express();
-const port = 4000;
+const port = process.env.port || 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-  })
-);
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//   })
+// );
 
 mongoose.connect(
   "mongodb+srv://testDBUser:gd5R7PJ75MJXqrXN@webervice.yhwacfo.mongodb.net/AccidentData?retryWrites=true&w=majority"
