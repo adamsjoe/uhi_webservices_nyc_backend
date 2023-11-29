@@ -25,7 +25,7 @@ const mongoose = require("mongoose");
 // const swaggerSpec = swaggerJSDoc(options);
 
 const app = express();
-const port = process.env.port || 4000;
+const port = process.env.port || 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
