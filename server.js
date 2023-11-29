@@ -38,23 +38,23 @@ app.use(express.urlencoded({ extended: false }));
 //   })
 // );
 
-// mongoose.connect(
-//   "mongodb+srv://testDBUser:gd5R7PJ75MJXqrXN@webervice.yhwacfo.mongodb.net/AccidentData?retryWrites=true&w=majority"
-// );
-// const connection = mongoose.connection;
+mongoose.connect(
+  "mongodb+srv://testDBUser:gd5R7PJ75MJXqrXN@webervice.yhwacfo.mongodb.net/AccidentData?retryWrites=true&w=majority"
+);
+const connection = mongoose.connection;
 
-// connection.on("error", () => {
-//   console.error.bind(console, "error");
-// });
+connection.on("error", () => {
+  console.error.bind(console, "error");
+});
 
-// connection.once("open", () => {
-//   console.log("Mongoose Connected");
-// });
+connection.once("open", () => {
+  console.log("Mongoose Connected");
+});
 
-// const accidentDataModel = require("./models/accidentDataModel");
-// require("./routes/historicData/testRoute")(app);
-// require("./routes/historicData/historicData")(app);
-// require("./routes/liveData/liveData")(app);
+const accidentDataModel = require("./models/accidentDataModel");
+require("./routes/historicData/testRoute")(app);
+require("./routes/historicData/historicData")(app);
+require("./routes/liveData/liveData")(app);
 
 app.listen(port, () => {
   console.log("Waiting for connection...");
