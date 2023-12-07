@@ -49,11 +49,11 @@ app.use(function (req, res, next) {
 
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://nycfrontend-19000170.azurewebsites.net",
+  })
+);
 
 mongoose.connect(
   "mongodb+srv://testDBUser:gd5R7PJ75MJXqrXN@webervice.yhwacfo.mongodb.net/AccidentData?retryWrites=true&w=majority"
