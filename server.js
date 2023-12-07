@@ -32,13 +32,20 @@ const corsOption = {
     "http://localhost:3000",
     "http://nycfrontend-19000170.azurewebsites.net/",
   ],
-  credentials: true,
+  // credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 };
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors(corsOption));
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
