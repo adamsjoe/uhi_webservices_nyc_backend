@@ -27,8 +27,18 @@ const mongoose = require("mongoose");
 const app = express();
 const port = process.env.port || 8080;
 
+const corsOption = {
+  origin: [
+    "http://localhost:3000",
+    "https://nycfrontend-19000170.azurewebsites.net/",
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors(corsOption));
 
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
