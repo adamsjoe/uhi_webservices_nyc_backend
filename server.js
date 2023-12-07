@@ -30,7 +30,7 @@ const port = process.env.port || 8080;
 const corsOption = {
   origin: [
     "http://localhost:3000",
-    "https://nycfrontend-19000170.azurewebsites.net/",
+    "http://nycfrontend-19000170.azurewebsites.net/",
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
