@@ -27,29 +27,21 @@ const mongoose = require("mongoose");
 const app = express();
 const port = process.env.port || 8080;
 
-// const corsOption = {
-//   origin: [
-//     "http://localhost:3000",
-//     "http://nycfrontend-19000170.azurewebsites.net/",
-//   ],
-//   credentials: true,
-//   methods: ["GET", "POST", "PUT", "DELETE"],
-// };
-
+app.options(
+  "*",
+  cors({
+    origin: "http://nycfrontend-19000170.azurewebsites.net",
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
-
-// app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// app.use(corsOption);
+app.use(
+  cors({
+    origin: "http://nycfrontend-19000170.azurewebsites.net",
+    optionsSuccessStatus: 200,
+  })
+);
 
 mongoose.connect(
   "mongodb+srv://testDBUser:gd5R7PJ75MJXqrXN@webervice.yhwacfo.mongodb.net/AccidentData?retryWrites=true&w=majority"
