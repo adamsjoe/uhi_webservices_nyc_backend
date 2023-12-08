@@ -19,6 +19,7 @@ module.exports = function (app) {
         .lean()
         .exec();
       const datePart = allAccidentData.DATE.toISOString().split("T")[0];
+      console.log(">>>>>>>> ", req.socket.remoteAddress);
 
       res.json(datePart);
     } catch (err) {
