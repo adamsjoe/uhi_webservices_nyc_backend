@@ -28,7 +28,10 @@ const app = express();
 const port = process.env.port || 8080;
 
 const corsOption = {
-  origin: "*",
+  origin: [
+    "http://localhost:3000",
+    "http://nycfrontend-19000170.azurewebsites.net/",
+  ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 };
