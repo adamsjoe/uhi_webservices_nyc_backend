@@ -30,7 +30,7 @@ const port = process.env.port || 8080;
 app.options(
   "*",
   cors({
-    origin: "http://nycfrontend-19000170.azurewebsites.net",
+    origin: "*",
     optionsSuccessStatus: 200,
   })
 );
@@ -38,7 +38,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "http://nycfrontend-19000170.azurewebsites.net",
+    origin: "*",
     optionsSuccessStatus: 200,
   })
 );
