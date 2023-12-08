@@ -49,7 +49,6 @@ app.use(express.urlencoded({ extended: false }));
 
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.options("*", cors()); // include before other routes
 app.use(corsOption);
 
 mongoose.connect(
