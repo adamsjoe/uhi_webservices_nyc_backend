@@ -27,21 +27,21 @@ const mongoose = require("mongoose");
 const app = express();
 const port = process.env.port || 8080;
 
-app.options(
-  "*",
-  cors({
-    origin: "*",
-    optionsSuccessStatus: 200,
-  })
-);
+// app.options(
+//   "*",
+//   cors({
+//     origin: "*",
+//     optionsSuccessStatus: 200,
+//   })
+// );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(
-  cors({
-    origin: "*",
-    optionsSuccessStatus: 200,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*",
+//     optionsSuccessStatus: 200,
+//   })
+// );
 
 mongoose.connect(
   "mongodb+srv://testDBUser:gd5R7PJ75MJXqrXN@webervice.yhwacfo.mongodb.net/AccidentData?retryWrites=true&w=majority"
