@@ -19,7 +19,7 @@ module.exports = function (app) {
         .lean()
         .exec();
       const datePart = allAccidentData.DATE.toISOString().split("T")[0];
-      res.header("Access-Control-Allow-Origin", "*");
+
       res.json(datePart);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -44,7 +44,7 @@ module.exports = function (app) {
         .lean()
         .exec();
       const datePart = allAccidentData.DATE.toISOString().split("T")[0];
-      res.header("Access-Control-Allow-Origin", "*");
+
       res.json(datePart);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -82,7 +82,6 @@ module.exports = function (app) {
       console.log(`-> In the historic query to get all boroughs`);
       const allBoroughs = await accidentDataModel.find().distinct("BOROUGH");
 
-      res.header("Access-Control-Allow-Origin", "*");
       res.json(allBoroughs);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -105,7 +104,6 @@ module.exports = function (app) {
         BOROUGH: req.params.name,
       });
 
-      res.header("Access-Control-Allow-Origin", "*");
       res.json(boroughData);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -202,7 +200,6 @@ module.exports = function (app) {
         return a.month - b.month;
       });
 
-      res.header("Access-Control-Allow-Origin", "*");
       res.json(summaryArray);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -249,7 +246,6 @@ module.exports = function (app) {
         YEAR: req.params.year,
       });
 
-      res.header("Access-Control-Allow-Origin", "*");
       res.json(boroughData);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -347,7 +343,6 @@ module.exports = function (app) {
 
       summaryArray.sort((a, b) => a.month - b.month);
 
-      res.header("Access-Control-Allow-Origin", "*");
       res.json(summaryArray);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -376,7 +371,6 @@ module.exports = function (app) {
         })
         .sort({ DAY: 1 });
 
-      res.header("Access-Control-Allow-Origin", "*");
       res.json(boroughData);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -404,7 +398,6 @@ module.exports = function (app) {
         DAY: req.params.day,
       });
 
-      res.header("Access-Control-Allow-Origin", "*");
       res.json(boroughData);
     } catch (err) {
       res.status(500).json({ message: err.message });
