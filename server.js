@@ -28,24 +28,21 @@ const app = express();
 const port = process.env.port || 8080;
 
 const corsOption = {
-  origin: [
-    "http://localhost:3000",
-    "http://nycfrontend-19000170.azurewebsites.net/",
-  ],
+  origin: "*",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 };
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
 
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
