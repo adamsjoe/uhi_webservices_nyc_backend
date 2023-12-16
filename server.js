@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 // const swaggerUi = require("swagger-ui-express");
 
 // setup the service account to access google
-// const service_key = "./service-key.json";
+const service_key = "./service-key.json";
 process.env.GOOGLE_APPLICATION_CREDENTIALS = service_key;
 
 // const swaggerDefinition = {
