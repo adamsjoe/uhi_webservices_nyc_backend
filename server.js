@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 // setup the service account to access google
 // const service_key = "./service-key.json";
-// process.env.GOOGLE_APPLICATION_CREDENTIALS = service_key;
+process.env.GOOGLE_APPLICATION_CREDENTIALS = service_key;
 
 // const swaggerDefinition = {
 //   openapi: "3.0.0",
@@ -36,6 +36,7 @@ const port = process.env.port || 8080;
 // );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 // app.use(
 //   cors({
 //     origin: "*",
